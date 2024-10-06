@@ -1,0 +1,145 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İsim ve İyelik Eki Ekleme</title>
+    <style>
+        .drag-item {
+            padding: 10px;
+            margin: 5px;
+            background-color: #ddd;
+            border: 1px solid #000;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .name-area {
+            margin: 10px;
+            padding: 10px;
+            border: 2px solid #000;
+            width: 200px;
+            float: left;
+        }
+
+        #iyelikler {
+            margin-left: 250px;
+            padding: 10px;
+            border: 2px solid #000;
+            width: 100px;
+            float: right;
+        }
+
+        h3 {
+            clear: both;
+        }
+
+        .zamir {
+            font-weight: bold;
+            color: blue;
+        }
+
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>İsimler ve Zamirler:</h2>
+    <div id="isimZamirContainer"></div>
+    <div class="error" id="errorMessage"></div>
+
+    <h3>İyelik Ekleri:</h3>
+    <div id="iyelikler">
+        <span id="ek1" class="drag-item" draggable="true" ondragstart="drag(event)">-im</span>
+        <span id="ek2" class="drag-item" draggable="true" ondragstart="drag(event)">-in</span>
+        <span id="ek3" class="drag-item" draggable="true" ondragstart="drag(event)">-ı</span>
+        <span id="ek4" class="drag-item" draggable="true" ondragstart="drag(event)">-i</span>
+        <span id="ek5" class="drag-item" draggable="true" ondragstart="drag(event)">-imiz</span>
+        <span id="ek6" class="drag-item" draggable="true" ondragstart="drag(event)">-iniz</span>
+        <span id="ek7" class="drag-item" draggable="true" ondragstart="drag(event)">-ları</span>
+        <span id="ek8" class="drag-item" draggable="true" ondragstart="drag(event)">-leri</span>
+    </div>
+
+    <script>
+        // Sayfa yüklendiğinde isim ve zamirleri oluştur
+        window.onload = function () {
+            const isimZamirContainer = document.getElementById('isimZamirContainer');
+            const names = ["Kapı", "Kalem", "Defter", "Araba", "Okul", "Pencere", "Masa", "Bilgisayar", "Anahtar"];
+            const zamirler = ["Ben", "Sen", "O", "Biz", "Siz", "Onlar"];
+
+            for (let i = 0; i < names.length && i < zamirler.length; i++) {
+                let div = document.createElement('div');
+                div.className = 'name-area';
+                div.id = 'item' + (i + 1);
+                div.ondrop = drop;
+                div.ondragover = allowDrop;
+
+                // Zamir ve isim
+                div.innerHTML = `<span class="zamir">${zamirler[i]}: </span><span id="isim${i + 1}">${names[i]}</span>`;
+                isimZamirContainer.appendChild(div);
+            }
+        };
+
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
+
+        function drag(ev) {
+            ev.dataTransfer.setData("text", ev.target.id);
+        }
+
+        function drop(ev) {
+            ev.preventDefault();
+            var data = ev.dataTransfer.getData("text");
+            var iyelikEki = document.getElementById(data).innerText;
+            var dropArea = ev.target;
+
+            if (dropArea.tagName === "DIV") {
+                var spanElement = dropArea.querySelector("span:last-child");
+                var originalName = spanElement.innerText;
+                var newName = originalName + iyelikEki;
+
+                // Sesli uyum kontrolü
+                if (isVowelHarmonyCompatible(originalName, newName)) {
+                    spanElement.innerText = newName;
+                    document.getElementById('errorMessage').innerText = ''; // Hata mesajını temizle
+                } else {
+                    spanElement.innerText = originalName; // Değişikliği geri al
+                    document.getElementById('errorMessage').innerText = 'Hata: Sesli uyumuna uymuyor!';
+                }
+            }
+        }
+
+        // Sesli uyum kontrolü
+        function isVowelHarmonyCompatible(original, newWord) {
+            const lastVowelOriginal = getLastVowel(original);
+            const lastVowelNew = getLastVowel(newWord);
+
+            // Türkçe sesli uyumuna göre kontroller
+            if (lastVowelOriginal && lastVowelNew) {
+                return (lastVowelOriginal === lastVowelNew ||
+                    (isFrontVowel(lastVowelOriginal) === isFrontVowel(lastVowelNew)));
+            }
+            return true; // Eğer son sesli yoksa uyum geçerli sayılır
+        }
+
+        function getLastVowel(word) {
+            const vowels = 'aeıioöuü';
+            for (let i = word.length - 1; i >= 0; i--) {
+                if (vowels.includes(word[i].toLowerCase())) {
+                    return word[i].toLowerCase();
+                }
+            }
+            return null;
+        }
+
+        function isFrontVowel(vowel) {
+            return 'eiöü'.includes(vowel);
+        }
+    </script>
+
+</body>
+</html>
+

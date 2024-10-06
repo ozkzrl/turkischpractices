@@ -1,0 +1,17 @@
+﻿@model List<WebApplication11.Models.Animal>
+
+<div id="game-area">
+    @foreach (var animal in Model)
+    {
+        <img src="@animal.ImageUrl" alt="@animal.Name" data-id="@animal.Id" class="animal-img" />
+    }
+</div>
+
+<div>
+    <p>Yanlış Denemeler: @ViewBag.WrongAttempts</p>
+</div>
+
+
+
+
+

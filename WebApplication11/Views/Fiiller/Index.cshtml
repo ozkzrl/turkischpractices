@@ -1,0 +1,56 @@
+﻿@model List<Fiil>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<h2>Fiilleri Resimlerle Eşleştir</h2>
+
+<form id="eslesmeForm">
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Fiiller</h3>
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <div>
+                    <input type="checkbox" name="secilenFiiller" value="@Model[i].Id" />
+                    <label>@Model[i].FiilAdi</label>
+                </div>
+            }
+        </div>
+        <div class="col-md-6">
+            <h3>Resimler</h3>
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <div>
+                    <input type="checkbox" name="secilenResimler" value="@Model[i].Id" />
+                    <label><img src="@Model[i].ResimUrl" alt="@Model[i].FiilAdi" width="100" /></label>
+                </div>
+            }
+        </div>
+    </div>
+    <button type="submit">Eşleştir</button>
+</form>
+
+<div id="sonuc"></div>
+
+<script>
+    
+    $("#eslesmeForm").submit(function (event) {
+        event.preventDefault();
+        var secilenFiiller = $("input[name='secilenFiiller']:checked").map(function () { return this.value; }).get();
+        var secilenResimler = $("input[name='secilenResimler']:checked").map(function () { return this.value; }).get();
+
+        $.ajax({
+            url: '@Url.Action("EslesmeKontrol", "Fiiller")',
+            type: 'POST',
+            data: { secilenFiiller: secilenFiiller, secilenResimler: secilenResimler },
+            success: function (response) {
+                if (response.success) {
+                    $("#sonuc").html("<p>Doğru eşleştirme!</p>");
+                } else {
+                    $("#sonuc").html("<p>Yanlış eşleştirme.</p>");
+                }
+            }
+        });
+    });
+</script>
+
