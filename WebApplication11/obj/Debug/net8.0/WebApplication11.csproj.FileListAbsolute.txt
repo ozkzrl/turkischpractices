@@ -31,3 +31,4 @@ C:\Users\ozkan\source\repos\WebApplication11\WebApplication11\obj\Debug\net8.0\r
 C:\Users\ozkan\source\repos\WebApplication11\WebApplication11\bin\Debug\net8.0\Newtonsoft.Json.dll
 C:\Users\ozkan\source\repos\WebApplication11\WebApplication11\obj\Debug\net8.0\WebApplication11.csproj.AssemblyReference.cache
 C:\Users\ozkan\source\repos\WebApplication11\WebApplication11\obj\Debug\net8.0\WebAppli.46E32278.Up2Date
+C:\Users\ozkan\source\repos\WebApplication11\WebApplication11\obj\Debug\net8.0\WebApplication11.sourcelink.json
